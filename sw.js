@@ -1,4 +1,4 @@
-const CACHE='treino-v2';
+const CACHE='treino-v3';
 const ASSETS=['./','index.html','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));
@@ -17,7 +17,7 @@ self.addEventListener('fetch',e=>{
   if(u.origin!==location.origin) return;
   if(isDoc(e.request)){
     e.respondWith(
-      fetch(e.request).then(res=>{
+      fetch(e.request,{cache:'reload'}).then(res=>{
         const copy=res.clone();
         caches.open(CACHE).then(c=>c.put('index.html',copy));
         return res;

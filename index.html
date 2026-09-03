@@ -39,7 +39,10 @@ h1 em{display:block;font-style:normal;color:var(--accent)}
 h2.grp{font-family:PM,monospace;font-size:11.5px;font-weight:400;letter-spacing:.2em;
  text-transform:uppercase;color:var(--accent);margin:30px 0 4px}
 .ex{border-bottom:1px solid var(--line);padding:16px 0 14px;display:grid;
- grid-template-columns:1fr auto;grid-template-areas:"name vid" "sub vid" "dots load";gap:2px 12px}
+ grid-template-columns:1fr auto;grid-template-areas:"name vid" "sub vid" "met met" "dots load";gap:2px 12px}
+.met{grid-area:met;color:var(--accent);font-size:11.5px;line-height:1.35;margin-top:6px;
+ border-left:2px solid var(--accent);padding-left:9px}
+.met b{font-weight:400;letter-spacing:.12em;text-transform:uppercase;display:block;font-size:10px;opacity:.85}
 .ex.done .nm{color:var(--muted)}
 .nm{grid-area:name;font-family:BS,sans-serif;font-size:29px;font-weight:700;line-height:1.05;
  background:none;border:0;color:inherit;text-align:left;padding:0;cursor:pointer}
@@ -87,7 +90,7 @@ footer{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1p
 <div class="wrap">
   <header id="head"></header>
   <main id="list"></main>
-  <p class="note" id="note">Toque no nome do exercício para ver a progressão de carga. Marque as séries conforme fizer, anote a carga e toque em Concluir ao terminar — é isso que alimenta o histórico.</p>
+  <p class="note" id="note">Toque no nome do exercício para ver a progressão de carga. Marque as séries conforme fizer, anote a carga e toque em Concluir ao terminar — é isso que alimenta o histórico. O descanso indicado é entre séries do mesmo exercício; depois da série com método, descanse 3 min antes de seguir.<br><span id="ver" style="opacity:.6"></span></p>
 </div>
 <footer>
   <button class="btn" id="histBtn" type="button">Histórico</button>
@@ -96,7 +99,8 @@ footer{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1p
   <button class="btn" id="finish" type="button">Concluir</button>
 </footer>
 <script>
-const DAYS = [{"id": "01", "focus": "Peitoral e deltoide", "t1": "Peito", "t2": "& ombro", "s": [{"g": "Peito", "x": [["Supino inclinado", 3, "10–12", "2 séries de aquecimento antes", "supino+inclinado+execucao+correta"], ["Supino reto", 4, "8–10", "", "supino+reto+execucao+correta"], ["Crucifixo na polia", 4, "10–12", "", "crucifixo+na+polia+execucao"]]}, {"g": "Ombro", "x": [["Desenvolvimento máquina", 3, "10–12", "1 série de reconhecimento antes", "desenvolvimento+ombro+maquina+execucao"], ["Elevação frontal com corda", 3, "10–12", "", "elevacao+frontal+na+polia+corda+execucao"], ["Elevação lateral máquina", 3, "8–10", "", "elevacao+lateral+maquina+execucao"]]}]}, {"id": "02", "focus": "Largura de dorsal", "t1": "Costas", "t2": "largura", "s": [{"g": "Dorsal", "x": [["Puxada aberta pronada", 3, "10–12", "2 séries de aquecimento antes", "puxada+aberta+pronada+execucao"], ["Remada máquina neutra", 4, "8–10", "", "remada+maquina+pegada+neutra+execucao"], ["Pullover na polia alta", 3, "12–15", "", "pullover+na+polia+alta+execucao"], ["Remada unilateral halter", 3, "10–12", "", "remada+unilateral+halter+serrote+execucao"]]}, {"g": "Bíceps", "x": [["Rosca direta barra W", 3, "8–10", "", "rosca+direta+barra+w+execucao"], ["Rosca inclinada halteres", 3, "10–12", "", "rosca+inclinada+banco+halteres+execucao"]]}]}, {"id": "03", "focus": "Manutenção ativa", "t1": "Pernas", "t2": "geral", "s": [{"g": "Quadríceps", "x": [["Agachamento hack", 3, "10–12", "2 séries de aquecimento antes", "agachamento+hack+maquina+execucao"], ["Leg press 45°", 3, "10–12", "", "leg+press+45+execucao+correta"], ["Cadeira extensora", 2, "12–15", "", "cadeira+extensora+execucao+correta"]]}, {"g": "Posterior e panturrilha", "x": [["Mesa flexora", 3, "10–12", "", "mesa+flexora+execucao+correta"], ["Stiff com halteres", 2, "10–12", "", "stiff+com+halteres+execucao"], ["Panturrilha em pé", 3, "12–15", "", "panturrilha+em+pe+maquina+execucao"]]}]}, {"id": "04", "focus": "Deltoide lateral", "t1": "Ombro", "t2": "& tríceps", "s": [{"g": "Ombro e peito", "x": [["Desenvolvimento halteres", 3, "8–10", "2 séries de aquecimento antes", "desenvolvimento+com+halteres+ombro+execucao"], ["Elevação lateral halter", 4, "12–15", "", "elevacao+lateral+com+halteres+execucao"], ["Crucifixo inverso máquina", 4, "12–15", "", "crucifixo+inverso+maquina+deltoide+posterior"], ["Supino inclinado halteres", 3, "10–12", "", "supino+inclinado+com+halteres+execucao"]]}, {"g": "Tríceps", "x": [["Tríceps testa barra W", 3, "10–12", "", "triceps+testa+barra+w+execucao"], ["Tríceps corda na polia", 3, "12–15", "", "triceps+na+corda+polia+execucao"]]}]}, {"id": "05", "focus": "Espessura de dorsal", "t1": "Costas", "t2": "espessura", "s": [{"g": "Dorsal", "x": [["Barra fixa ou graviton", 3, "8–10", "1 série de reconhecimento antes", "barra+fixa+execucao+correta+costas"], ["Remada curvada barra", 4, "8–10", "", "remada+curvada+com+barra+execucao"], ["Remada baixa triângulo", 3, "10–12", "", "remada+baixa+triangulo+execucao"], ["Puxada pegada neutra", 3, "10–12", "", "puxada+pegada+neutra+triangulo+execucao"]]}, {"g": "Bíceps", "x": [["Rosca martelo", 3, "10–12", "", "rosca+martelo+execucao+correta"], ["Rosca scott máquina", 3, "12–15", "", "rosca+scott+maquina+execucao"]]}]}];
+const DAYS = [{"id": "01", "focus": "Peitoral e deltoide", "t1": "Peito", "t2": "& ombro", "m": {"nome": "Cluster", "alvo": "Supino inclinado", "detalhe": "3 blocos de 4 reps com 20 s de pausa, na última série"}, "s": [{"g": "Peito", "x": [["Supino inclinado", 3, "10–12", "2 séries de aquecimento antes", "supino+inclinado+execucao+correta", "2–3 min", "Cluster"], ["Supino reto", 4, "8–10", "", "supino+reto+execucao+correta", "2–3 min", ""], ["Crucifixo na polia", 4, "10–12", "", "crucifixo+na+polia+execucao", "60–90 s", ""]]}, {"g": "Ombro", "x": [["Desenvolvimento máquina", 3, "10–12", "1 série de reconhecimento antes", "desenvolvimento+ombro+maquina+execucao", "90–120 s", ""], ["Elevação frontal com corda", 3, "10–12", "", "elevacao+frontal+na+polia+corda+execucao", "60–90 s", ""], ["Elevação lateral máquina", 3, "8–10", "", "elevacao+lateral+maquina+execucao", "60–90 s", ""]]}]}, {"id": "02", "focus": "Largura de dorsal", "t1": "Costas", "t2": "largura", "m": {"nome": "Drop set", "alvo": "Puxada aberta pronada", "detalhe": "última série à falha, −30%, mais reps, 2 quedas"}, "s": [{"g": "Dorsal", "x": [["Puxada aberta pronada", 3, "10–12", "2 séries de aquecimento antes", "puxada+aberta+pronada+execucao", "2–3 min", "Drop set"], ["Remada máquina supinada", 4, "8–10", "", "remada+maquina+pegada+supinada+execucao", "90–120 s", ""], ["Pullover na polia alta", 3, "12–15", "", "pullover+na+polia+alta+execucao", "60–90 s", ""], ["Remada unilateral máquina", 3, "10–12", "cada lado", "remada+unilateral+maquina+execucao", "90–120 s", ""]]}, {"g": "Bíceps", "x": [["Rosca direta barra W", 3, "8–10", "", "rosca+direta+barra+w+execucao", "60–90 s", ""], ["Rosca inclinada halteres", 3, "10–12", "", "rosca+inclinada+banco+halteres+execucao", "60–90 s", ""]]}]}, {"id": "03", "focus": "Manutenção ativa", "t1": "Pernas", "t2": "geral", "m": {"nome": "Cluster", "alvo": "Agachamento hack", "detalhe": "3 blocos de 4 reps com 20 s, sem chegar à falha"}, "s": [{"g": "Quadríceps", "x": [["Agachamento hack", 3, "10–12", "2 séries de aquecimento antes", "agachamento+hack+maquina+execucao", "2–3 min", "Cluster"], ["Leg press 45°", 3, "10–12", "", "leg+press+45+execucao+correta", "2–3 min", ""], ["Cadeira extensora", 2, "12–15", "", "cadeira+extensora+execucao+correta", "60–90 s", ""]]}, {"g": "Posterior e panturrilha", "x": [["Mesa flexora", 3, "10–12", "", "mesa+flexora+execucao+correta", "60–90 s", ""], ["Stiff com halteres", 2, "10–12", "", "stiff+com+halteres+execucao", "90–120 s", ""], ["Panturrilha em pé", 3, "12–15", "", "panturrilha+em+pe+maquina+execucao", "60–90 s", ""]]}]}, {"id": "04", "focus": "Deltoide lateral", "t1": "Ombro", "t2": "& tríceps", "m": {"nome": "Drop set", "alvo": "Elevação lateral halter", "detalhe": "última série: falha, −30%, falha, −30%, falha"}, "s": [{"g": "Ombro e peito", "x": [["Desenvolvimento halteres", 3, "8–10", "2 séries de aquecimento antes", "desenvolvimento+com+halteres+ombro+execucao", "2–3 min", ""], ["Elevação lateral halter", 4, "12–15", "", "elevacao+lateral+com+halteres+execucao", "60–90 s", "Drop set"], ["Crucifixo inverso máquina", 4, "12–15", "", "crucifixo+inverso+maquina+deltoide+posterior", "60–90 s", ""], ["Supino inclinado halteres", 3, "10–12", "", "supino+inclinado+com+halteres+execucao", "2–3 min", ""]]}, {"g": "Tríceps", "x": [["Tríceps testa barra W", 3, "10–12", "", "triceps+testa+barra+w+execucao", "90–120 s", ""], ["Tríceps corda na polia", 3, "12–15", "", "triceps+na+corda+polia+execucao", "60–90 s", ""]]}]}, {"id": "05", "focus": "Espessura de dorsal", "t1": "Costas", "t2": "espessura", "m": {"nome": "Cluster", "alvo": "Barra fixa ou graviton", "detalhe": "3 blocos de 3 reps com 20 s de pausa, na última série"}, "s": [{"g": "Dorsal", "x": [["Barra fixa ou graviton", 3, "8–10", "1 série de reconhecimento antes", "barra+fixa+execucao+correta+costas", "2–3 min", "Cluster"], ["Remada curvada barra", 4, "8–10", "", "remada+curvada+com+barra+execucao", "2–3 min", ""], ["Remada baixa triângulo", 3, "10–12", "", "remada+baixa+triangulo+execucao", "90–120 s", ""], ["Puxada pegada neutra", 3, "10–12", "", "puxada+pegada+neutra+triangulo+execucao", "90–120 s", ""]]}, {"g": "Bíceps", "x": [["Rosca martelo", 3, "10–12", "", "rosca+martelo+execucao+correta", "60–90 s", ""], ["Rosca scott máquina", 3, "12–15", "", "rosca+scott+maquina+execucao", "60–90 s", ""]]}]}];
+const VERSAO='2026-09-b';
 const KEY='treino.v2', OLD='treino.v1';
 let db = load();
 function load(){
@@ -143,11 +147,15 @@ function renderDay(){
   let g=null;
   flat(d).forEach(({e,id,g:grp})=>{
     if(grp!==g){ g=grp; list.appendChild(el('h2','grp',grp)); }
-    const [name,sets,reps,obs,q]=e, done=db.marks[id]||0;
+    const [name,sets,reps,obs,q,rest,met]=e, done=db.marks[id]||0;
     const row=el('div','ex'+(done>=sets?' done':''));
     const nm=el('button','nm',name); nm.type='button';
     nm.onclick=()=>{ openEx=id; view='hist'; render(); scrollTo(0,0); };
-    const sub=el('div','sub'); sub.innerHTML='<b>'+sets+' × '+reps+'</b>'+(obs?' · '+obs:'');
+    const sub=el('div','sub'); sub.innerHTML='<b>'+sets+' × '+reps+'</b>'
+      +(rest?' · <b>'+rest+'</b> de descanso':'')+(obs?' · '+obs:'');
+    let metBox=null;
+    if(met && d.m){ metBox=el('div','met');
+      metBox.innerHTML='<b>Método · '+d.m.nome+'</b>'+d.m.detalhe; }
     const a=el('a','vid'); a.href='https://www.youtube.com/results?search_query='+q;
     a.target='_blank'; a.rel='noopener'; a.setAttribute('aria-label','Ver execução de '+name);
     a.innerHTML='<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 13 8l-9 5.5z" fill="currentColor"/></svg>';
@@ -164,7 +172,8 @@ function renderDay(){
     inp.value=db.loads[id]||''; inp.setAttribute('aria-label','Carga de '+name);
     inp.oninput=()=>{ db.loads[id]=inp.value; save(); };
     lab.append(inp, el('span',null,'kg'));
-    row.append(nm,sub,a,dots,lab); list.appendChild(row);
+    row.append(nm,sub,a); if(metBox) row.append(metBox);
+    row.append(dots,lab); list.appendChild(row);
   });
   document.getElementById('note').style.display='';
   progress(d);
@@ -270,7 +279,14 @@ function exportData(){
 }
 
 render();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+document.getElementById('ver').textContent='Programa '+VERSAO;
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});
+  let recarregou=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(!recarregou){ recarregou=true; location.reload(); }
+  });
+}
 </script>
 </body>
 </html>
