@@ -1,0 +1,18 @@
+{
+  "name": "Treino LRF",
+  "short_name": "Treino",
+  "description": "Fichas, marcação de séries, carga e progressão do programa de musculação.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#12100F",
+  "theme_color": "#12100F",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
