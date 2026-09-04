@@ -49,11 +49,19 @@ normalizado (`Supino inclinado` → `supino-inclinado`), então **renomear um
 exercício desliga o histórico dele**. Para renomear sem perder a progressão, é
 preciso migrar a chave antiga junto.
 
-**O gerador na skill `treinos` está defasado.** O `gerar_app.py` produz a versão
-antiga do app, sem cronômetro, sem repetições e com o histórico posicional. Se
-uma conversa futura regerar o `index.html` a partir da skill, tudo isso se perde.
-Enquanto a skill não for atualizada, mudanças no treino devem ser feitas
-editando o `index.html` deste repositório.
+**A skill `treinos` gera este app.** O `scripts/gerar_site.py` foi atualizado para
+produzir exatamente esta versão — conferido bloco a bloco contra o `index.html`
+publicado: CSS, JavaScript e corpo do HTML idênticos. O `scripts/programa.json`
+continua sendo a fonte dos exercícios, e o `versao` dele (`2026-09-c`) é o que
+aparece no rodapé do app.
+
+Na prática, mudar o treino é editar o `programa.json` na skill, subir o `versao`,
+rodar `python scripts/gerar_site.py` e subir o `index.html` gerado aqui.
+
+O `scripts/gerar_app.py` da skill, que produz um `treino.html` único sem
+hospedagem, continua defasado — gera a versão anterior, sem cronômetro nem
+repetições. Ele não afeta este repositório, mas não sirva esse arquivo como se
+fosse o app atual.
 
 ## Backup
 
