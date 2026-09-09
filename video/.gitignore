@@ -1,0 +1,7 @@
+# Vídeos não entram no repositório: são grandes e mudam a cada gravação.
+entrada/*
+saida/*
+!entrada/.gitkeep
+!saida/.gitkeep
+__pycache__/
+*.pyc

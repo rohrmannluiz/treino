@@ -19,6 +19,12 @@ Os exercícios ficam na constante `DAYS`, uma única linha JSON dentro do
 [nome, séries, faixa de reps, observação, busca do YouTube, descanso, método]
 ```
 
+## Vídeo
+
+A pasta `video/` guarda um projeto à parte: transformar notícia em roteiro
+de teleprompter de até 90 segundos e, depois da gravação, legendar e editar
+o vídeo. Nada disso mexe no app de treino. Ver `video/README.md`.
+
 ## Como atualizar o treino
 
 1. Alterar a linha `const DAYS = [...]` no `index.html`.
